@@ -2,17 +2,31 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
 
-func main() {
-	http.HandleFunc("/upload", fileUploadHandler)
+type Post struct {
+	Post   string
+	Data   []string
+	IsRead bool
+	Sent   string
+	Read   string
+}
 
-	fmt.Println("Server running on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func main() {
+	http.HandleFunc("/healthz", healthz)
+	http.HandleFunc("/", index)
+	http.HandleFunc("/test", test)
+	http.HandleFunc("/upload", fileUploadHandler)
+	http.HandleFunc("/send-push", test)
+
+	fmt.Println("Server running on :9000")
+	log.Fatal(http.ListenAndServe(":9000", nil))
 }
 
 func fileUploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,4 +72,51 @@ func createFile(filename string) (*os.File, error) {
 	}
 
 	return dst, nil
+}
+
+func healthz(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Pushrrr - App version: %s", "0.0.1")
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	t := time.Now()
+
+	posts := []Post{
+		{
+			Post: "here lies a post",
+			Data: []string{
+				"wqewe",
+				"qweqwe",
+			},
+			IsRead: true,
+			Sent:   t.String(),
+			Read:   t.String(),
+		},
+	}
+
+	tmpl := template.Must(template.ParseFiles("./views/index.html"))
+
+	tmpl.Execute(w, posts)
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+
+	t := time.Now()
+
+	posts := []Post{
+		{
+			Post: "here lies a post",
+			Data: []string{
+				"wqewe",
+				"qweqwe",
+			},
+			IsRead: true,
+			Sent:   t.String(),
+			Read:   t.String(),
+		},
+	}
+
+	tmpl := template.Must(template.ParseFiles("./views/index.html"))
+
+	tmpl.Execute(w, posts)
 }
