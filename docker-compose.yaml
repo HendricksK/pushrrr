@@ -1,0 +1,70 @@
+version: '3.8'
+
+# Services
+services:
+    # Go Service
+    go:
+        build:
+            dockerfile: ./local/go/go.dockerfile
+        container_name: pushrrr-go
+        stdin_open: true
+        tty: true
+        volumes:
+            # - './app:/app'
+            - './app:/app'
+            - './data:/data'
+        ports:
+            - 9000:9000
+        networks: 
+            - backend    
+        # depends_on:
+        #     - sqlite
+        # command: go run main.go
+        # need to reload supervisor after rebuild WIPPPPPPPPPPPP 
+        # develop:
+            # watch:
+            #     - action: sync+restart
+            #       path: ./app
+            #       target: ./build
+                    # - path: ./app
+                    # - target: ./app
+
+
+    # Nginx Service
+    nginx:
+        build: 
+            dockerfile: ./local/nginx/nginx.dockerfile
+        container_name: pushrrr-nginx
+        ports:
+            - 8484:80
+        links:
+            - 'go'
+        volumes:
+            - './local/nginx/conf.d:/etc/nginx/conf.d'
+            - './logs/nginx/:/var/log/nginx'
+            # - './build:/var/www/html'
+        networks: 
+            - backend        
+        depends_on:
+            - go
+    sqlite:
+        build:
+            dockerfile: ./local/sqlite/sqlite.dockerfile
+        container_name: pushrrr-sqlite
+        stdin_open: true
+        tty: true
+        ports:
+            - 3366:3306
+        volumes:
+            - ./database:/database
+        networks: 
+            - backend
+
+networks:
+    backend:
+        driver: bridge   
+         
+
+    
+
+
