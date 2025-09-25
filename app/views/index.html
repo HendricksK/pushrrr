@@ -54,14 +54,36 @@ body {
 }
 
 .bubble {
-    background-color: #4caf50;
     width: auto;
     margin: 0 auto;
     color: #000;
     border-radius: 10px;
-    padding: 20px;
+    padding: 5px;
     float: right;
     margin-right: 1em;
+    .bubble-data {
+        padding:10px;
+        p {
+            margin: 0;
+        }
+    }
+}
+
+.read {
+   background-color: #c8e8c8;
+}
+
+.unread {
+    background-color: #4caf50;
+}
+
+img
+{
+    background-image: url('./assets/theme/images/404.JPG');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 300px;
+    height: 200px
 }
 
 </style>
@@ -71,19 +93,24 @@ body {
 
 <div class="history">
 {{ range . }}
-<div {{if .IsRead}} class="bubble storage-type" {{else}} class="bubble unread" {{end}}>
 
-<small class="comment">{{ .Sent }}</small>
-<p>{{ .Post }}</p>
-<div>
-    {{ range .Data}}
-        <img src="data:image/png;base64" + {{.}} alt="Blank"/>
-    {{ end}}
+<div {{if .IsRead}} class="bubble read" {{else}} class="bubble unread" {{end}}>
+    <small class="comment"> Sent {{ .Sent }}</small>
+    <div class="bubble-data">
+        <p>{{ .Post }}</p>
+        <div class="bubble-data-files">
+            <!-- {{ range .Data}}
+                <img src="data:image/png;base64" + {{.}}  width="300" height="auto" >
+            {{ end}} -->
+
+            {{range $element := .Data}} 
+                <img class="avatar" data="{{$element}}" type="image/jpeg" width="300" height="auto">
+
+            {{end}}
+        </div>
+    </div>
+    <small class="comment"> Read {{ .Read }}</small>
 </div>
-<small class="comment">{{ .Read }}</small>
-
-</div>
-
 {{ end }}
 </div>
 

@@ -20,10 +20,13 @@ type Post struct {
 
 func main() {
 	http.HandleFunc("/healthz", healthz)
-	http.HandleFunc("/", index)
+	http.HandleFunc("/", fail)
+	http.HandleFunc("/home", index)
 	http.HandleFunc("/test", test)
 	http.HandleFunc("/upload", fileUploadHandler)
 	http.HandleFunc("/send-push", test)
+
+	http.HandleFunc("/assets/theme/images/", themeImages)
 
 	fmt.Println("Server running on :9000")
 	log.Fatal(http.ListenAndServe(":9000", nil))
@@ -111,12 +114,33 @@ func test(w http.ResponseWriter, r *http.Request) {
 				"qweqwe",
 			},
 			IsRead: true,
-			Sent:   t.String(),
-			Read:   t.String(),
+			Sent:   t.Format("2006-01-02 15:04:05"),
+			Read:   t.Format("2006-01-02 15:04:05"),
 		},
 	}
 
 	tmpl := template.Must(template.ParseFiles("./views/index.html"))
 
 	tmpl.Execute(w, posts)
+}
+
+func themeImages(w http.ResponseWriter, r *http.Request) {
+
+	pwd, _ := os.Getwd()
+
+	fmt.Printf("%s\n", pwd+r.URL.RequestURI())
+
+	buf, err := os.ReadFile(pwd + r.URL.RequestURI())
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	w.Header().Set("Content-Type", "image/png")
+	w.Write(buf)
+}
+
+func fail(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(401)
 }
