@@ -5,7 +5,7 @@ services:
     # Go Service
     go:
         build:
-            dockerfile: ./local/go/go.dockerfile
+            dockerfile: ./deployment/local/go/go.dockerfile
         container_name: pushrrr-go
         stdin_open: true
         tty: true
@@ -33,30 +33,36 @@ services:
     # Nginx Service
     nginx:
         build: 
-            dockerfile: ./local/nginx/nginx.dockerfile
+            dockerfile: ./deployment/local/nginx/nginx.dockerfile
         container_name: pushrrr-nginx
         ports:
             - 8484:80
         links:
             - 'go'
         volumes:
-            - './local/nginx/conf.d:/etc/nginx/conf.d'
-            - './logs/nginx/:/var/log/nginx'
+            - './deployment/local/nginx/conf.d:/etc/nginx/conf.d'
+            - './deployment/local/nginx/:/var/log/nginx'
             # - './build:/var/www/html'
         networks: 
             - backend        
         depends_on:
             - go
-    sqlite:
+    mariadb:
         build:
-            dockerfile: ./local/sqlite/sqlite.dockerfile
-        container_name: pushrrr-sqlite
+            dockerfile: ./deployment/local/mariadb/mariadb.dockerfile
+        container_name: pushrrr-mariadb
+        restart: always
         stdin_open: true
         tty: true
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: pushrrr
+            MYSQL_PASSWORD: pushrrr
+            MYSQL_DATABASE: pushrrr
         ports:
             - 3366:3306
         volumes:
-            - ./database:/database
+            - ./database/mariadb/data:/var/lib/mysql
         networks: 
             - backend
 

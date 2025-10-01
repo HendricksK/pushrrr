@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/HendricksK/pushrrr/app/models"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )
@@ -149,12 +150,14 @@ func fail(w http.ResponseWriter, r *http.Request) {
 }
 
 func handle(w http.ResponseWriter, r *http.Request) {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(""), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
 	// Migrate the schema
 	db.AutoMigrate()
+
+	fmt.Println(models.Ping())
 
 }

@@ -1,4 +1,4 @@
-module github.com/HendricksK/pushrrr.git
+module github.com/HendricksK/pushrrr/app
 
 go 1.24.4
 
