@@ -9,9 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/HendricksK/pushrrr/app/models"
-	"github.com/glebarez/sqlite"
-	"gorm.io/gorm"
+	controllers "github.com/HendricksK/pushrrr/app/controllers"
 )
 
 type Post struct {
@@ -150,14 +148,9 @@ func fail(w http.ResponseWriter, r *http.Request) {
 }
 
 func handle(w http.ResponseWriter, r *http.Request) {
-	db, err := gorm.Open(sqlite.Open(""), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
+	fmt.Fprintf(w, "Pushrrr - App version: %s", r.Method)
 
-	// Migrate the schema
-	db.AutoMigrate()
+	posts := controllers.GetPosts()
 
-	fmt.Println(models.Ping())
-
+	fmt.Fprintf(w, "%s", posts[0].Id)
 }

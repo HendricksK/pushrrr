@@ -1,3 +1,5 @@
 /logs
 app/tmp/main
 database/*
+deployment/local/nginx/access.log
+deployment/local/nginx/error.log

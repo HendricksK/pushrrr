@@ -4,29 +4,32 @@ import (
 	// "log"
 	"database/sql"
 	"fmt"
-	"os"
+	"runtime"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+
+	helpers "github.com/HendricksK/pushrrr/app/helpers"
 )
 
-var database *sql.DB
-
-// 192.168.0.134:3309
-// var db_host = "172.17.0.3:3306";
-var db_host = "127.0.0.1:3306"
+var dbHost = "pushrrr-mariadb:3306"
 
 func Open() *sql.DB {
 
-	fmt.Println("Shell:", os.Getenv("SHELL"))
-
 	// parseTime=true https://github.com/go-sql-driver/mysql#timetime-support
-	db := getEnv("DATABASE")
-	database, err := sql.Open("mysql", "dev-sacos:riuc6Y5Rend$W5%BSG*S$@tcp("+db_host+")/sacos_dev?parseTime=true")
-	if err != nil {
-		panic(err)
+	dbName := helpers.GetEnvVar("db.database")
+	dbUser := helpers.GetEnvVar("db.user")
+	dbPass := helpers.GetEnvVar("db.password")
 
+	fmt.Println(dbName)
+
+	database, err := sql.Open("mysql", dbUser+":"+dbPass+"@tcp("+dbHost+")/"+dbName+"?parseTime=true")
+	if err != nil {
+		_, filename, line, _ := runtime.Caller(1)
+		helpers.Log(err.Error(), filename, line)
+		panic(err)
 	}
+
 	// See "Important settings" section.
 	database.SetConnMaxLifetime(time.Minute * 3)
 	database.SetMaxOpenConns(10)
@@ -36,5 +39,5 @@ func Open() *sql.DB {
 }
 
 func Close(conn *sql.DB) {
-	conn.Close()
+	defer conn.Close()
 }

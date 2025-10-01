@@ -1,0 +1,8 @@
+app:
+  name: "pushrrr"
+namespace: "app"
+owner: "khendricks"
+db:
+  user: "pushrrr"
+  password: "pushrrr"
+  database: "pushrrr"

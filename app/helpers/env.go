@@ -1,18 +1,21 @@
 package helpers
 
 import (
-	"fmt"
-	"os"
+	"log"
+
+	"github.com/spf13/viper"
 )
 
-func getEnv(key string) string {
+func GetEnvVar(key string) string {
 
-	val, ok := os.LookupEnv(key)
-	if !ok {
-		fmt.Printf("%s not set\n", key)
-	} else {
-		fmt.Printf("%s=%s\n", key, val)
+	viper.AddConfigPath("./config")
+
+	// Read the config file
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatalf("Error reading config file, %s", err)
 	}
 
-	return val
+	return viper.GetString(key)
+
 }
