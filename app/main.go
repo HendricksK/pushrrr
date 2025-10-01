@@ -8,6 +8,9 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/glebarez/sqlite"
+	"gorm.io/gorm"
 )
 
 type Post struct {
@@ -20,11 +23,11 @@ type Post struct {
 
 func main() {
 	http.HandleFunc("/healthz", healthz)
-	http.HandleFunc("/", fail)
-	http.HandleFunc("/home", index)
+	http.HandleFunc("/assets/*", fail)
+	http.HandleFunc("/", index)
 	http.HandleFunc("/test", test)
 	http.HandleFunc("/upload", fileUploadHandler)
-	http.HandleFunc("/send-push", test)
+	http.HandleFunc("/send-push", handle)
 
 	http.HandleFunc("/assets/theme/images/", themeImages)
 
@@ -143,4 +146,15 @@ func themeImages(w http.ResponseWriter, r *http.Request) {
 
 func fail(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(401)
+}
+
+func handle(w http.ResponseWriter, r *http.Request) {
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	// Migrate the schema
+	db.AutoMigrate()
+
 }

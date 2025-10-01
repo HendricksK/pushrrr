@@ -14,6 +14,8 @@ RUN go install github.com/air-verse/air@latest
 
 COPY /app/. .
 
+RUN go mod tidy
+
 COPY /proc/. /etc/supervisor/conf.d/
 
 EXPOSE 9000
