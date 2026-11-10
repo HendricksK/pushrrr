@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"io"	
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 
-	controllers "github.com/HendricksK/pushrrr/app/controllers"
+	templates "github.com/HendricksK/pushrrr/app/models/templates"
 )
 
 type Post struct {
@@ -21,12 +22,18 @@ type Post struct {
 }
 
 func main() {
+
+	t := templates.New()
+
+    e := echo.New()
+    e.Renderer = t
+
 	http.HandleFunc("/healthz", healthz)
-	http.HandleFunc("/assets/*", fail)
+	// http.HandleFunc("/assets/*", fail)
 	http.HandleFunc("/", index)
 	http.HandleFunc("/test", test)
 	http.HandleFunc("/upload", fileUploadHandler)
-	http.HandleFunc("/send-push", handle)
+	http.HandleFunc("/push", push)
 
 	http.HandleFunc("/assets/theme/images/", themeImages)
 
@@ -100,6 +107,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl := template.Must(template.ParseFiles("./views/index.html"))
+	// page1Templ := template.Must(template.New("p1").Parse("./views/index.html"))
+	// tmpl.Must(page1Templ.Parse("./views/shared/head.html"))
 
 	tmpl.Execute(w, posts)
 }
@@ -147,10 +156,18 @@ func fail(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(401)
 }
 
-func handle(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Pushrrr - App version: %s", r.Method)
+func push(w http.ResponseWriter, r *http.Request) {
+	// fmt.Fprintf(w, "Pushrrr - App version: %s ", r.Method)
 
-	posts := controllers.GetPosts()
+	data, err := io.ReadAll(r.Body)
 
-	fmt.Fprintf(w, "%s", posts[0].Id)
+	if err != nil {
+		fmt.Printf("server: could not read request body: %s\n", err)
+	}
+
+	fmt.Printf("server: request body: %s\n", data)
+
+	// posts := controllers.CreatePost(data['data'])
+
+	// fmt.Fprintf(w, "%d ", posts[0].Id)
 }

@@ -10,12 +10,12 @@ import (
 )
 
 type Post struct {
-	Id        uint       `gorm:"primaryKey"`
-	Name      *string    `json:"name"`
-	Data      *string    `json:"data"`
-	Uri       *string    `json:"uri"`
-	Author    *string    `json:"author"`
-	Tags      *string    `json:"tags"`
+	Id uint `gorm:"primaryKey"`
+	// Name      *string    `json:"name"`
+	Data *string `json:"data"`
+	// Uri       *string    `json:"uri"`
+	// Author    *string    `json:"author"`
+	// Tags      *string    `json:"tags"`
 	CreatedAt *time.Time `json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }
@@ -26,7 +26,7 @@ func Ping() string {
 	return "pong"
 }
 
-func GetPost(id string) Post {
+func GetPost(id uint) Post {
 
 	var post Post
 
@@ -80,7 +80,7 @@ func GetPosts() []Post {
 	return posts
 }
 
-func GetPostsWhereIn(ids []string) []Post {
+func GetPostsWhereIn(ids []uint) []Post {
 
 	fmt.Print(helpers.GetEnvVar("DATABASE"))
 
@@ -114,4 +114,26 @@ func GetPostsWhereIn(ids []string) []Post {
 	database.Close(db)
 
 	return posts
+}
+
+func CreatePost(posts ...[]Post) []Post {
+	db := database.Open()
+	// https://go.dev/doc/database/change-data
+	result, err := db.Exec("INSERT INTO " + __table + "(data) VALUES(?)")
+	if err != nil {
+		_, filename, line, _ := runtime.Caller(1)
+		helpers.Log(err.Error(), filename, line)
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return nil
+	}
+
+	fmt.Println(id)
+
+	var newPosts []Post
+
+	return newPosts
+	// defer rows.Close()
 }

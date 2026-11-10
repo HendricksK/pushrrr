@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 # Services
 services:
@@ -66,6 +66,19 @@ services:
         networks: 
             - backend
 
+    redistore:
+        build:
+            dockerfile: ./deployment/local/redisstore/redisstore.dockerfile
+        container_name: pushrrr-redisstore
+        restart: always
+        stdin_open: true
+        tty: true
+        ports:
+            - 6666:6379
+        volumes:
+            - ./datastore/redis/data:/data
+        networks:
+            - backend    
 networks:
     backend:
         driver: bridge   
