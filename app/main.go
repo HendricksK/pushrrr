@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"time"
 
-	templates "github.com/HendricksK/pushrrr/app/models/templates"
+	templates "github.com/HendricksK/pushrrr/app/package/templates"
 )
 
 type Post struct {
