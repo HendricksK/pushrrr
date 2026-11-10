@@ -1,5 +1,5 @@
 /logs
-app/tmp/main
+app/tmp/*
 database/*
 datastore/*
 deployment/local/nginx/access.log
