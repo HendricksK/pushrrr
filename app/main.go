@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"time"
 
-	templates "github.com/HendricksK/pushrrr/app/package/templates"
+	templates "github.com/HendricksK/pushrrr/app/helpers/templates"
 )
 
 type Post struct {
@@ -23,10 +23,10 @@ type Post struct {
 
 func main() {
 
-	t := templates.New()
+	// t := templates.New()
 
-    e := echo.New()
-    e.Renderer = t
+    // e := echo.New()
+    // e.Renderer = t
 
 	http.HandleFunc("/healthz", healthz)
 	// http.HandleFunc("/assets/*", fail)
@@ -109,6 +109,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./views/index.html"))
 	// page1Templ := template.Must(template.New("p1").Parse("./views/index.html"))
 	// tmpl.Must(page1Templ.Parse("./views/shared/head.html"))
+
+	// return c.Render(http.StatusOK, "index.html", posts)
 
 	tmpl.Execute(w, posts)
 }
