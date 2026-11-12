@@ -1,26 +1,32 @@
-package helpers
+// package helpers
 
-import (
-    "embed"
-    "html/template"
-)
+// import (
+//     "embed"
+//     "html/template"
+//     "io"
 
-type Template struct {
-    templates *template.Template
-}
+//     "github.com/labstack/echo/v5"
+// )
 
-func New() *Template {
-    funcMap := template.FuncMap{
-        "inc": inc,
-    }
+// //go:embed templates/*.html
+// var tmplFS embed.FS
 
-    templates := template.Must(template.New("").Funcs(funcMap).ParseFS(tmplFS, "views/*.html"))
-    return &Template{
-        templates: templates,
-    }
-}
+// type Template struct {
+//     templates *template.Template
+// }
+
+// func New() *Template {
+//     funcMap := template.FuncMap{
+//         "inc": inc,
+//     }
+
+//     templates := template.Must(template.New("").Funcs(funcMap).ParseFS(tmplFS, "app/views/*/*.html"))
+//     return &Template{
+//         templates: templates,
+//     }
+// }
 
 
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-    return t.templates.ExecuteTemplate(w, name, data)
-}
+// func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+//     return t.templates.ExecuteTemplate(w, name, data)
+// }

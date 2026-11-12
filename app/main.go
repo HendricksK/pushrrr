@@ -9,8 +9,11 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"embed"
 
-	templates "github.com/HendricksK/pushrrr/app/helpers/templates"
+
+	"github.com/labstack/echo/v5"
+	// templates "github.com/HendricksK/pushrrr/app/helpers"
 )
 
 type Post struct {
@@ -20,6 +23,29 @@ type Post struct {
 	Sent   string
 	Read   string
 }
+
+//go:embed templates/*.html
+var tmplFS embed.FS
+
+type Template struct {
+    templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+    return t.templates.ExecuteTemplate(w, name, data)
+}
+
+func New() *Template {
+    funcMap := template.FuncMap{
+        // "inc": inc,
+    }
+
+    templates := template.Must(template.New("").Funcs(funcMap).ParseFS(tmplFS, "*.html"))
+    return &Template{
+        templates: templates,
+    }
+}
+
 
 func main() {
 
@@ -106,7 +132,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	tmpl := template.Must(template.ParseFiles("./views/index.html"))
+	tmpl := template.Must(template.ParseFiles("./templates/index.html"))
 	// page1Templ := template.Must(template.New("p1").Parse("./views/index.html"))
 	// tmpl.Must(page1Templ.Parse("./views/shared/head.html"))
 
