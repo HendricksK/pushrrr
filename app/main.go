@@ -13,10 +13,11 @@ import (
 
 
 	"github.com/labstack/echo/v5"
-	// templates "github.com/HendricksK/pushrrr/app/helpers"
+	controllers "github.com/HendricksK/pushrrr/app/controllers"
 )
 
 type Post struct {
+	Id	   int
 	Post   string
 	Data   []string
 	IsRead bool
@@ -118,6 +119,10 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 
 func index(w http.ResponseWriter, r *http.Request) {
 	t := time.Now()
+
+	post := controllers.GetPost(12)
+
+	fmt.Printf("%+v\n", post)
 
 	posts := []Post{
 		{

@@ -1,12 +1,12 @@
-// package controllers
+package controllers
 
-// import (
-// 	models "github.com/HendricksK/pushrrr/app/models"
-// )
+import (
+	models "github.com/HendricksK/pushrrr/app/models"
+)
 
-// func GetPost(id uint) models.Post {
-// 	return models.GetPost(id)
-// }
+func GetPost(id int) models.Post {
+	return models.GetPost(id)
+}
 
 // func GetPosts(ids ...[]uint) []models.Post {
 
