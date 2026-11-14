@@ -30,15 +30,11 @@ type Post struct {
 
 func main() {
 
-	t := templates.New()
-
-    e := echo.New()
-    e.Renderer = t
-
 	http.HandleFunc("/healthz", healthz)
 	// http.HandleFunc("/assets/*", fail)
 	http.HandleFunc("/", index)
 	http.HandleFunc("/test", test)
+	http.HandleFunc("/home", home)
 	http.HandleFunc("/upload", fileUploadHandler)
 	http.HandleFunc("/push", push)
 
@@ -124,6 +120,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 	// return c.Render(http.StatusOK, "index.html", posts)
 
 	tmpl.Execute(w, posts)
+}
+
+func home (w http.ResponseWriter, r *http.Request) {
+	lib.Home(w, r)
 }
 
 func test(w http.ResponseWriter, r *http.Request) {
