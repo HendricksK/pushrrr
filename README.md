@@ -12,3 +12,6 @@ docker container logs <container_id> -f to continously see the logs, air is alwa
 any go mods etc just bash into the container 
 
 docker exec -it <container_id> bash
+
+## helpers
+### https://lets-go.alexedwards.net/sample/02.08-html-templating-and-inheritance.html
