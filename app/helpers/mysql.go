@@ -1,4 +1,4 @@
-package database
+package helpers
 
 import (
 	// "log"
@@ -9,24 +9,24 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	helpers "github.com/HendricksK/pushrrr/app/helpers"
+	// helpers "github.com/HendricksK/pushrrr/app/helpers"
 )
 
 var dbHost = "pushrrr-mariadb:3306"
 
-func Open() *sql.DB {
+func OpenSQL() *sql.DB {
 
 	// parseTime=true https://github.com/go-sql-driver/mysql#timetime-support
-	dbName := helpers.GetEnvVar("db.database")
-	dbUser := helpers.GetEnvVar("db.user")
-	dbPass := helpers.GetEnvVar("db.password")
+	dbName := GetEnvVar("db.database")
+	dbUser := GetEnvVar("db.user")
+	dbPass := GetEnvVar("db.password")
 
 	fmt.Println(dbName)
 
 	database, err := sql.Open("mysql", dbUser+":"+dbPass+"@tcp("+dbHost+")/"+dbName+"?parseTime=true")
 	if err != nil {
 		_, filename, line, _ := runtime.Caller(1)
-		helpers.Log(err.Error(), filename, line)
+		Log(err.Error(), filename, line)
 		panic(err)
 	}
 
@@ -38,6 +38,15 @@ func Open() *sql.DB {
 	return database
 }
 
-func Close(conn *sql.DB) {
+func CloseSQL(conn *sql.DB) {
 	defer conn.Close()
+}
+
+func IsAvailable (conn *sql.DB) {
+	alive := conn.Ping()
+	if alive != nil {
+		_, filename, line, _ := runtime.Caller(1)
+		Log(alive.Error(), filename, line)
+		panic(alive)
+	}
 }

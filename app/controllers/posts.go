@@ -22,7 +22,9 @@ func GetPost(id int, w http.ResponseWriter, r *http.Request) {
     // file in the slice.
     files := []string{
         "./templates/shared/base.html",
+        "./templates/shared/footer.html",
         "./templates/pages/home.html",
+
     }
 
     // Use the template.ParseFiles() function to read the files and store the

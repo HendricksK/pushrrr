@@ -1,0 +1,21 @@
+{{define "chat-list"}}
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>{{template "title" .}} suggestionbox</title>
+    </head>
+    <body>
+        <header>
+            <h1><a href='/home'>suggestionbox</a></h1>
+        </header>
+        <main>
+            {{template "login" .}}
+        </main>
+        <hr>
+        <footer>
+            {{template "footer" .}}
+        </footer>
+    </body>
+</html>
+{{end}}

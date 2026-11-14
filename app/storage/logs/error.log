@@ -1,0 +1,1 @@
+/app/controllers/posts.go - line: 14: sql: expected 5 destination arguments in Scan, not 1

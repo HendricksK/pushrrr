@@ -1,6 +1,18 @@
 {{define "title"}}Home{{end}}
 
-{{define "main"}}
-    <h2>Latest Snippets</h2>
-    <p>There's nothing to see here yet!</p>
+{{define "login"}}
+    <section class="loader">
+        <img src="https://sb.dev-ninja.com/assets/theme/images/okay.gif"/>
+    </section>
+    <section class="login">
+        <div>
+            <form action="/login">
+                <label for="username">username</label><br>
+                <input type="text" id="username" name="username"><br>
+                <!-- <label for="password">password</label><br>
+                <input type="password" id="password" name="password"> -->
+                <input type="submit" value="okay">
+            </form>
+        </div>
+    </section>
 {{end}}
