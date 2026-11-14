@@ -9,11 +9,13 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-	"embed"
+	// "embed"
 
 
-	"github.com/labstack/echo/v5"
+	// "github.com/labstack/echo/v5"
+	
 	controllers "github.com/HendricksK/pushrrr/app/controllers"
+	lib "github.com/HendricksK/pushrrr/app/lib"
 )
 
 type Post struct {
@@ -25,35 +27,13 @@ type Post struct {
 	Read   string
 }
 
-//go:embed templates/*.html
-var tmplFS embed.FS
-
-type Template struct {
-    templates *template.Template
-}
-
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-    return t.templates.ExecuteTemplate(w, name, data)
-}
-
-func New() *Template {
-    funcMap := template.FuncMap{
-        // "inc": inc,
-    }
-
-    templates := template.Must(template.New("").Funcs(funcMap).ParseFS(tmplFS, "*.html"))
-    return &Template{
-        templates: templates,
-    }
-}
-
 
 func main() {
 
-	// t := templates.New()
+	t := templates.New()
 
-    // e := echo.New()
-    // e.Renderer = t
+    e := echo.New()
+    e.Renderer = t
 
 	http.HandleFunc("/healthz", healthz)
 	// http.HandleFunc("/assets/*", fail)
