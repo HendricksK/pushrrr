@@ -15,7 +15,7 @@ import (
 	// "github.com/labstack/echo/v5"
 	
 	controllers "github.com/HendricksK/pushrrr/app/controllers"
-	lib "github.com/HendricksK/pushrrr/app/lib"
+	// lib "github.com/HendricksK/pushrrr/app/lib"
 )
 
 type Post struct {
@@ -96,10 +96,6 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 func index(w http.ResponseWriter, r *http.Request) {
 	t := time.Now()
 
-	post := controllers.GetPost(12)
-
-	fmt.Printf("%+v\n", post)
-
 	posts := []Post{
 		{
 			Post: "here lies a post",
@@ -123,7 +119,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func home (w http.ResponseWriter, r *http.Request) {
-	lib.Home(w, r)
+	controllers.GetPost(12, w, r)
 }
 
 func test(w http.ResponseWriter, r *http.Request) {
